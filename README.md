@@ -43,7 +43,6 @@ To run the protocol, place these files in `Bpod Local/Protocols/CueConditioning/
 - Signal Processing Toolbox (`findpeaks`), Statistics and Machine Learning Toolbox (`robustfit`), Image Processing Toolbox (`drawrectangle`, `imshow`)
 - [Bpod_Gen2](https://github.com/sanworks/Bpod_Gen2) (for the protocol files)
 - [FFmpeg](https://ffmpeg.org/) (for the video-file option in `Extract_raw_data.m`)
-- `make_blank_fig.m`: a figure helper called by `CueConditioning.m` that is not included in this repository
 - Optional: `cprintf` (MATLAB File Exchange) for colored output in `PreviewTrialSequence.m`; plain text is printed without it
 
 ## Credits
