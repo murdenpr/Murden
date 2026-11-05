@@ -24,7 +24,7 @@ Every script is annotated line by line with plain-language comments, so the code
 | `UrnModel.m` | Builds the session's trial sequence and outcomes ("urn" sampling without replacement, balanced within trial chunks) |
 | `VerifyBlankITIAdjustment.m` | Test script: checks the shortened ITI before Blank trials using recorded session data |
 
-To run a protocol, place it and the supporting files in a folder with the same name in `Bpod Local/Protocols/` (Ex: `Bpod Local/Protocols/CC_Ver2/` for `CC_Ver2.m`).
+To run a protocol, place the script and all supporting files in a folder with the same name as your chosen protocol. Then place inside the Bpod protocol folder (Ex: .../Protocols/CC_Ver2/ for CC_Ver2.m). Default directory can be changed in Bpod’s folder settings.
 
 ### `Data_Analysis/` — offline analysis
 
