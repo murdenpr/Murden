@@ -49,7 +49,7 @@ To run a protocol, place it and the supporting files in a folder with the same n
 ## Credits
 
 - `CueConditioning.m` and `CC_Ver2.m` are built on the `ProtocolTemplate.m` skeleton from the [Sanworks Bpod_Gen2 repository](https://github.com/sanworks/Bpod_Gen2) (© Sanworks LLC, GPL-3.0).
-- The original cue-conditioning task code that `CueConditioning.m`, `CC_Ver2.m`, and `load_odor_serial_messages.m` were developed from was written by **[ORIGINAL AUTHOR — TO BE CONFIRMED]**. Substantially altered/extended by Ryan Murden (2025–2026) for use at the FBRI Amo Lab - adding urn-model trial sequencing, additional customization options, airpuff outcomes, truncated-exponential ITIs, TTL-pulse cue/outcome encoding, IR LED video sync, and a live session plot.
+- The original cue-conditioning task code that `CueConditioning.m`, `CC_Ver2.m`, and `load_odor_serial_messages.m` were developed from was written by **[ORIGINAL AUTHOR — TO BE CONFIRMED]**. Substantially altered/extended by Ryan Murden (2025–2026) for use at the FBRI Amo Lab - adding urn-model trial sequencing, additional trial customization options, GlobalTimer controlled airpuff outcomes, truncated-exponential ITIs, TTL-pulse cue/outcome encoding, IR LED video sync, and live session plot.
 - Colored command window output uses `cprintf` by Yair Altman (MATLAB File Exchange).
 - All other scripts were written by Ryan Murden.
 
