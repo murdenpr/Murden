@@ -24,7 +24,7 @@ Every script is annotated line by line with plain-language comments, so the code
 | `UrnModel.m` | Builds the session's trial sequence and outcomes ("urn" sampling without replacement, balanced within trial chunks) |
 | `VerifyBlankITIAdjustment.m` | Test script: checks the shortened ITI before Blank trials using recorded session data |
 
-To run the selected protocol, place these files in `Bpod Local/Protocols/CueConditioning/`.
+To run a protocol, place it and the supporting files in a folder with the same name in `Bpod Local/Protocols/` (Ex: `Bpod Local/Protocols/CC_Ver2/` for `CC_Ver2.m`).
 
 ### `Data_Analysis/` — offline analysis
 
@@ -48,8 +48,8 @@ To run the selected protocol, place these files in `Bpod Local/Protocols/CueCond
 
 ## Credits
 
-- `CueConditioning.m` and 'CC_ver2.m' is built on the `ProtocolTemplate.m` skeleton from the [Sanworks Bpod_Gen2 repository](https://github.com/sanworks/Bpod_Gen2) (© Sanworks LLC, GPL-3.0).
-- The original cue-conditioning task code that `CueConditioning.m` and `load_odor_serial_messages.m` were developed from was written by **[ORIGINAL AUTHOR — TO BE CONFIRMED]**. Substantially altered/extended by Ryan Murden (2025–2026) for use at the FBRI Amo Lab - adding urn-model trial sequencing, additional customization options, airpuff outcomes, truncated-exponential ITIs, TTL-pulse cue/outcome encoding, IR LED video sync, and a live session plot.
+- `CueConditioning.m` and `CC_Ver2.m` are built on the `ProtocolTemplate.m` skeleton from the [Sanworks Bpod_Gen2 repository](https://github.com/sanworks/Bpod_Gen2) (© Sanworks LLC, GPL-3.0).
+- The original cue-conditioning task code that `CueConditioning.m`, `CC_Ver2.m`, and `load_odor_serial_messages.m` were developed from was written by **[ORIGINAL AUTHOR — TO BE CONFIRMED]**. Substantially altered/extended by Ryan Murden (2025–2026) for use at the FBRI Amo Lab - adding urn-model trial sequencing, additional customization options, airpuff outcomes, truncated-exponential ITIs, TTL-pulse cue/outcome encoding, IR LED video sync, and a live session plot.
 - Colored command window output uses `cprintf` by Yair Altman (MATLAB File Exchange).
 - All other scripts were written by Ryan Murden.
 

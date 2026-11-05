@@ -9,11 +9,11 @@
 % Two ways to call this function:
 %
 %   Air = AirPuff(pressurizeTime, releaseTime)
-%       Original behavior (used by CueConditioning.m and CC_Ver2.m). Timer 2 starts with no delay
+%       Original behavior (used by CueConditioning.m). Timer 2 starts with no delay
 %       and sends no valve message; the 'AirPuff_Pressurize' state opens the pressurize valve itself.
 %
 %   Air = AirPuff(pressurizeTime, releaseTime, pressurizeDelay, pressurizeMsg, pressurizeTTLTimer)
-%       Used by CC_Ver3.m. Timer 2 waits pressurizeDelay seconds after it is triggered, then sends
+%       Used by CC_Ver2.m. Timer 2 waits pressurizeDelay seconds after it is triggered, then sends
 %       serial message pressurizeMsg to ValveModule1 to open the pressurize valve. This lets
 %       pressurization run during the odor state, with no separate pressurize state.
 %       If pressurizeTTLTimer is given (e.g. 4, the TTL timer), Timer 2 also triggers that timer
@@ -75,7 +75,7 @@ function Air = AirPuff(pressurizeTime, releaseTime, pressurizeDelay, pressurizeM
             'Loop',         0, ...                      % Timer 2 runs once per trigger
             'SendGlobalTimerEvents', 1, ...             % Timer 2 start/end are recorded in the Bpod data (same as before)
             'LoopInterval', 0, ...                      % Not used (no looping); listed only because arguments are read by position
-            'OnsetTrigger', Air.PressurizeOnsetTrigger);% Timers started when Timer 2's delay ends (the TTL timer in CC_Ver3)
+            'OnsetTrigger', Air.PressurizeOnsetTrigger);% Timers started when Timer 2's delay ends (the TTL timer in CC_Ver2)
 
         % GlobalTimer 3: release
         sma = SetGlobalTimer(sma, ...

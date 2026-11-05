@@ -8,9 +8,9 @@ function load_odor_serial_messages
 %   1 = all valves closed, 2-9 = valve 1-8 open alone
 %   8 = airpuff pressurize valve (valve 7), 9 = airpuff release valve (valve 8)
 %
-% Messages 10-18 (used by CC_Ver3): message (9 + n) = message n with the pressurize valve also open.
-%   CC_Ver3 opens the pressurize valve during the odor, so it sends these instead of message 8
-%   to keep the trial's odor valve open while pressurizing. Older versions never send 10-18.
+% Messages 10-18 (used by CC_Ver2): message (9 + n) = message n with the pressurize valve also open.
+%   CC_Ver2 opens the pressurize valve during the odor, so it sends these instead of message 8
+%   to keep the trial's odor valve open while pressurizing. CueConditioning.m never sends 10-18.
 
 bankBytes     = [0 1 2 4 8 16 32 64 128];                       % Byte for messages 1-9 (one bit per valve)
 pressurizeBit = 64;                                             % Bit for the pressurize valve (valve 7)

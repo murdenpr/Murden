@@ -61,7 +61,7 @@ for i = 1:nTrials                                               % For each compl
     % Outcome: Reward / AirPuff / Omission, by the same valid-timestamp check
     if isfield(states, 'Reward') && ~isempty(states.Reward) && ~any(isnan(states.Reward))  % 'Reward' state occurred -> reward trial
         trialOutcome(i) = "Reward";
-    elseif isfield(states, 'AirPuff_Pressurize') && ~isempty(states.AirPuff_Pressurize) && ~any(isnan(states.AirPuff_Pressurize))  % 'AirPuff_Pressurize' state occurred -> airpuff trial
+    elseif isfield(states, 'AirPuff_Release') && ~isempty(states.AirPuff_Release) && ~any(isnan(states.AirPuff_Release))  % 'AirPuff_Release' state occurred -> airpuff trial (both CueConditioning.m and CC_Ver2.m have this state)
         trialOutcome(i) = "AirPuff";
     else
         trialOutcome(i) = "Omission";                           % Neither occurred -> omission
