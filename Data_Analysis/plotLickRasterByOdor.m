@@ -20,9 +20,9 @@ end
 Data = dataStruct.SessionData;                                  % Pulls the SessionData struct
 
 %% --- Define state names and colors ---
-baseStates = {'PreOdor','Trace','ITI'};                         % States shown in every trial
-odorStates = {'Odor_A','Odor_B','Odor_C','Odor_D','Blank_Odor'};  % All possible odor cue states (only one occurs per trial)
-allStates = [baseStates, odorStates];                           % Combines both lists
+baseStates = {'PreOdor','Trace','ITI'};                          % States shown in every trial
+odorStates = {'Odor_A','Odor_B','Odor_C','Odor_D','Blank_Odor'}; % All possible odor cue states (only one occurs per trial)
+allStates = [baseStates, odorStates];                            % Combines both lists
 
 stateColors = containers.Map( ...                               % Assigns a background color to each state
     {'PreOdor','Odor_A','Odor_B','Odor_C','Odor_D','Blank_Odor','Trace','ITI'}, ...
