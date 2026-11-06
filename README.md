@@ -30,13 +30,10 @@ To run a protocol, place the script and all supporting files in a folder with th
 
 | File | Purpose |
 |---|---|
-| `Extract_raw_data.m` | Step 1 of the lick pipeline: extracts motion and intensity pixel data from chosen ROI, syncs video to the Bpod clock using IR LED flashes and checks for accuracy using regression analysis and residual error, and detects/removes Bpod pauses from data collection (ffmpeg install required) |
-| `Analyze_lick_data.m` | Step 2 of the lick pipeline: detects licks, assigns them to trials, and plots cue-aligned rasters and lick rates |
+| `Extract_raw_data.m` | Extracts motion and intensity pixel data from chosen ROI, syncs video to the Bpod clock using IR LED flashes and checks for accuracy using regression analysis and residual error, and detects/removes Bpod pauses from data collection (ffmpeg install required). Pixel data is saved and can be retrieved for later analysis as required |
 | `Convert_Jpeg_To_mp4.m` | Converts a folder of numbered camera frames into an .mp4 video |
 | `ExportSessionChronological.m` | Exports every state and event in a session to a spreadsheet, in chronological order |
 | `plotLickRasterByOdor.m` | Lick rasters by odor, using the Bpod lick port events |
-
-**Status:** the video-to-Bpod sync in `Extract_raw_data.m` is working reliably. Separating genuine licks from other motion (whisking, paw movement) is still in active development, so lick detection methods, thresholds, and filters will continue to change.
 
 ## Requirements
 
