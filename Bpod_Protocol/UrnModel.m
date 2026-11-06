@@ -159,8 +159,8 @@ for c = 1:C                                                         % Creates lo
                 pP = GUI.blank_airpuff_prob;
         end
                                                                     % Computes number of each outcome for each trial type chunk
-        nR = floor(Ni * pR);                                        % Multiplies trial type chunk count by entered reward probability, then rounds down (floor)
-        nP = floor(Ni * pP);                                        % Same for airpuff; omission count = total count minus reward and airpuff outcomes
+        nR = floor(Ni * pR + 1e-9);                                 % Multiplies trial type chunk count by entered reward probability, then rounds down (floor)
+        nP = floor(Ni * pP + 1e-9);                                 % Same for airpuff; omission count = total count minus reward and airpuff outcomes; (1e-9 allows for small floating point errors)
         nO = Ni - nR - nP;                                          % Because outcomes are calculated this way, any existing remainder generates an additional omission outcome
                                                                     % Ex: number of chunk 1 trial 'A' rewards = chunk 1 trial type 'A' count * 'A' reward probability
         outcomes = [ ...                                            % Number of each outcome is now converted to rew_state 'StateChangeConditions'. This will be used by the 

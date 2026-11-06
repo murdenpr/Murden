@@ -2,35 +2,47 @@ function CueConditioning
 
 global BpodSystem % Imports the BpodSystem object to the function workspace
 
+% Global timer list:
+%   GT1 — IR LED flash, loops entire session (camera-visible)
+%   GT2 — airpuff pressurize solenoid
+%   GT3 — airpuff release solenoid
+%   GT4 — TTL pulse on BNC1:
+%            GT4_Start(1) = odor valve open
+%            GT4_Start(2) = water valve open (reward) or airpuff pressurize (airpuff)
+%            GT4_Start(3) = airpuff release (airpuff trials only)
+%            Only GT4_Start(1) present on no-outcome trials
+%   GT5 — trial start TTL pulse BNC1
+%   GT6 — photometry TTL trigger BNC2
+
 %% Setup (runs once before the first trial)
 maxTrials = 400; % Set to some sane value (replaced below by the n_trials value entered in the GUI)
 
 %--- Define parameters and trial structure
-S = BpodSystem.ProtocolSettings;        % Loads settings file chosen in launch manager into current workspace as a struct called 'S'
-if isempty(fieldnames(S))               % If chosen settings file was an empty struct, populate struct with default settings
-    S.OdorIdentities = randperm(8);     % Can use this to randomize our valves (use different odors for different mice, change in cur_trial_type settings)
+S = BpodSystem.ProtocolSettings;                    % Loads settings file chosen in launch manager into current workspace as a struct called 'S'
+if isempty(fieldnames(S))                           % If chosen settings file was an empty struct, populate struct with default settings
+    S.OdorIdentities = randperm(8);                 % Can use this to randomize our valves (use different odors for different mice, change in cur_trial_type settings)
 
-    S.GUI.PreOdor = 2;                  % The following S.GUI commands set our default GUI values (can be changed in the pre-trial GUI)
-    S.GUI.Odor = 1;                     % All state durations (PreOdor, Odor, Trace) are in seconds
+    S.GUI.PreOdor = 2;                              % The following S.GUI commands set our default GUI values (can be changed in the pre-trial GUI)
+    S.GUI.Odor = 1;                                 % All state durations (PreOdor, Odor, Trace) are in seconds
     S.GUI.Trace = 2;
-    S.GUI.ITI_exp_mean = 11;            % Mean ITI (s) passed to ExpTimer.m
-    S.GUI.RewardSize = 5;               % Reward volume (µL); converted to water valve open time by GetValveTimes
-    S.GUI.n_trials = 400;               % Total number of trials in the session
-    S.GUI.Trial_Chunk_Size = 20;        % Trials per chunk; UrnModel.m balances trial types/outcomes within each chunk
-    S.GUI.LEDFlashEnable = 1;           % Turns the IR LED sync flash (PIB_LED_Flash.m) on/off
+    S.GUI.ITI_exp_mean = 11;                        % Mean ITI (s) passed to ExpTimer.m
+    S.GUI.RewardSize = 5;                           % Reward volume (µL); converted to water valve open time by GetValveTimes
+    S.GUI.n_trials = 400;                           % Total number of trials in the session
+    S.GUI.Trial_Chunk_Size = 20;                    % Trials per chunk; UrnModel.m balances trial types/outcomes within each chunk
+    S.GUI.LEDFlashEnable = 1;                       % Turns the IR LED sync flash (PIB_LED_Flash.m) on/off
     S.GUIMeta.LEDFlashEnable.Style = 'checkbox';  
-    S.GUI.LEDFlashInterval = 30;        % Time between LED flashes (s), set longer than single trial max duration if only trial start flash is wanted
+    S.GUI.LEDFlashInterval = 30;                    % Time between LED flashes (s), set longer than single trial max duration if only trial start flash is wanted
     S.GUIMeta.LEDFlashInterval.Style = 'edit';
-    S.GUI.AirPuff_Pressurize_Time = 2.0;  % Airpuff pressurization time (s); also subtracted from the trace period
+    S.GUI.AirPuff_Pressurize_Time = 2.0;            % Airpuff pressurization time (s); also subtracted from the trace period
     S.GUIMeta.AirPuff_Pressurize_Time.Style = 'edit';
-    S.GUI.AirPuff_Release_Time = 0.2;   % Airpuff release duration (s)
+    S.GUI.AirPuff_Release_Time = 0.2;               % Airpuff release duration (s)
     S.GUIMeta.AirPuff_Release_Time.Style = 'edit';
 
-    S.GUI.A_enabled = 1;                % Each trial type (A-D, Blank) has the same settings: enabled = checkbox to include it,
+    S.GUI.A_enabled = 1;                            % Each trial type (A-D, Blank) has the same settings: enabled = checkbox to include it,
     S.GUIMeta.A_enabled.Style = 'checkbox';
-    S.GUI.A_freq = 0.5;                 % freq = fraction of all trials that are this type (enabled freqs must sum to 1),
-    S.GUI.A_reward_prob = 0.9;          % reward_prob = probability of a reward outcome,
-    S.GUI.A_airpuff_prob = 0;           % airpuff_prob = probability of an airpuff outcome (anything left over = omission)
+    S.GUI.A_freq = 0.5;                             % freq = fraction of all trials that are this type (enabled freqs must sum to 1),
+    S.GUI.A_reward_prob = 0.9;                      % reward_prob = probability of a reward outcome,
+    S.GUI.A_airpuff_prob = 0;                       % airpuff_prob = probability of an airpuff outcome (anything left over = omission)
 
     S.GUI.B_enabled = 1;
     S.GUIMeta.B_enabled.Style = 'checkbox';
@@ -82,7 +94,7 @@ maxTrials = S.GUI.n_trials;                                                     
 
 %check frequencies add to 1
 total_freq = S.GUI.A_enabled*S.GUI.A_freq+S.GUI.B_enabled*S.GUI.B_freq+S.GUI.C_enabled*S.GUI.C_freq+S.GUI.D_enabled*S.GUI.D_freq+S.GUI.blank_enabled*S.GUI.blank_freq;
-while total_freq ~= 1                                                               % Checks whether the enabled trial type frequencies (summed above) add to 1                                        
+while abs(total_freq - 1) > 1e-9                                                    % Checks that the enabled frequencies add to 1 (allows for tiny rounding errors, Ex: 0.7+0.2+0.1)                                        
     disp('Trial frequencies do not add to 1');                                      % If frequency values do not add to 1, display this error message
     BpodSystem.Status.Pause = 1;                                                    % The system will remain paused until valid frequencies are entered
     HandlePauseCondition;                                                           % Once frequencies sum to 1, you can now hit play to continue
@@ -124,17 +136,7 @@ BpodSystem.Status.Pause = 1;                                        % Upon press
 HandlePauseCondition;                                               % Pressing play a second time will begin the trial session run
 
 for currentTrial = 1:maxTrials                                      % Trial loop: everything below repeats once per trial
-    total_freq = S.GUI.A_enabled*S.GUI.A_freq+S.GUI.B_enabled*S.GUI.B_freq+S.GUI.C_enabled*S.GUI.C_freq+S.GUI.D_enabled*S.GUI.D_freq+S.GUI.blank_enabled*S.GUI.blank_freq;
-    while total_freq ~= 1                                           % Mid-session frequency check
-        disp('Trial frequencies do not add to 1');                  % Note: S is not re-synced inside the trial loop, so total_freq always uses
-        BpodSystem.Status.Pause = 1;                                % the values locked in before the session, and this check never triggers
-        HandlePauseCondition;                                       % NOT RECOMMENDED TO MAKE FREQUENCY CHANGES MID-SESSION WHILE USING URNMODEL.M WITH THIS CODE
-        S = BpodParameterGUI('sync', S);                            % GUI changes made mid-session are not applied; the trial sequence is
-        BpodSystem.ProtocolSettings=S;                              % already fixed by UrnModel.m, so it's best to decide on all settings
-        SaveBpodProtocolSettings();                                 % before starting the trial session
-        total_freq = S.GUI.A_enabled*S.GUI.A_freq+S.GUI.B_enabled*S.GUI.B_freq+S.GUI.C_enabled*S.GUI.C_freq+S.GUI.D_enabled*S.GUI.D_freq+S.GUI.blank_enabled*S.GUI.blank_freq;
-    end
-
+    
     %select trial type
     cur_trial_type = TrialSeq{currentTrial};                        % Defines variable cur_trial_type as the current trial in the TrialSeq vector array (generated by UrnModel.m)
     switch cur_trial_type                                           % Sets the cur_trial_type variable to have the following settings for each case type (used in the 'odor_name' state)
@@ -248,7 +250,6 @@ for currentTrial = 1:maxTrials                                      % Trial loop
         BpodSystem.Data.TrialSettings(currentTrial) = S;                            % Adds the settings used for the current trial to the Data struct
         SaveBpodSessionData;                                                        % Saves the field BpodSystem.Data to the current data file
         %save_analogdata(AnalogData,strrep(BpodSystem.Path.CurrentDataFile,'.mat','.h5'),currentTrial)
-        %--- Typically a block of code here will update online plots using the newly updated BpodSystem.Data
         PlotSessionProgress(BpodSystem.Data, 'Figure', event_fig);                  % Calls PlotSessionProgress.m for display of real-time data 
     end
 
